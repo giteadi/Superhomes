@@ -13,14 +13,36 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-    console.log('User Registered:', formData);
-    // TODO: Add your registration API logic here
+
+    try {
+      const response = await fetch('http://localhost:4000/api/v1/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
+      console.log('User Registered:', data);
+      alert('Registration successful!');
+      // Reset form or redirect as needed
+    } catch (error) {
+      console.error('Error during registration:', error);
+      alert(error.message);
+    }
   };
 
   return (

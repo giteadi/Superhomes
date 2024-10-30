@@ -41,7 +41,7 @@ export default function Header() {
 
         {/* Middle Logo */}
         <div className="absolute left-1/2 transform -translate-x-1/2 text-4xl font-semibold text-white italic">
-          SuperHomes
+          SuperHomess
         </div>
 
         {/* Right Icons (FaUserCircle) */}
