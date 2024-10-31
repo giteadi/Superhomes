@@ -2,8 +2,8 @@ const express = require("express");
 const { db } = require("../Config/db");
 const { sendOtpEmail } = require("../Middleware/mail");
 
-const otpStore = new Map();  // Stores OTPs temporarily
-const tempUserStore = new Map(); // Temporarily store user data
+const otpStore = new Map();  
+const tempUserStore = new Map(); 
 
 // Function to send OTP
 const sendOtp = async (email) => {
