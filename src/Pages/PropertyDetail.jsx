@@ -64,7 +64,7 @@ const PropertyDetail = () => {
           <img
             src={property.images[0]}
             alt={`Property ${property.name} - Main Image`}
-            className="w-full h-full object-cover rounded-lg border border-gray-300"
+            className="w-full h-full object-cover rounded-xl border border-gray-300"
           />
         </div>
 
@@ -75,7 +75,7 @@ const PropertyDetail = () => {
               key={index}
               src={img}
               alt={`Property ${property.name} - Image ${index + 2}`}
-              className={`w-full h-48 object-cover rounded-lg border border-gray-300`}
+              className={`w-full h-48 object-cover rounded-xl border border-gray-300`}
             />
           ))}
         </div>
