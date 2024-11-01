@@ -19,7 +19,7 @@ app.use(fileUpload({
 
 
 // User routes
-app.use("/api/v1/", userRoutes);
+app.use("/api/v1/user", userRoutes);
 
 // Admin routes
 app.use("/api/v1/admin", adminRoutes); // Uncommented to activate admin routes
