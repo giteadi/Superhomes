@@ -1,3 +1,4 @@
+// authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
@@ -8,7 +9,7 @@ export const registerUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:4000/api/v1/user/register', userData);
-      return response.data;
+      return response.data; // Ensure this contains necessary user info
     } catch (error) {
       return rejectWithValue(error.response?.data || { message: 'Registration failed!' });
     }
@@ -21,7 +22,7 @@ export const loginUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:4000/api/v1/user/login', userData);
-      return response.data; // Expecting role to be part of the response
+      return response.data; // Expecting user and role to be part of the response
     } catch (error) {
       return rejectWithValue(error.response?.data || { message: 'Login failed!' });
     }
@@ -64,7 +65,8 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user; // Ensure this is the correct property
+        state.role = action.payload.user.role; // Assuming role is within user object
         state.isAuthenticated = true;
         toast.success('Registration successful! Welcome!');
       })
@@ -81,10 +83,10 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.role = action.payload.role; // Store user role from response
+        state.user = action.payload.user; // Ensure this matches your API response structure
+        state.role = action.payload.role; // Store user role from response (directly from payload)
         state.isAuthenticated = true;
-        toast.success(`Login successful! Welcome ${action.payload.role}!`);
+        toast.success(`Login successful! Welcome ${state.user.name || 'User'}!`); // Include name if available
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -95,6 +97,10 @@ const authSlice = createSlice({
       // **Logout Reducer**
       .addCase(logoutUser.fulfilled, (state) => {
         state.loading = false;
+        state.user = null; // Clear user data on logout
+        state.role = null; // Clear role on logout
+        state.isAuthenticated = false; // Update authenticated status
+        toast.success('Logout successful!'); // Optional: notify user
       });
   },
 });

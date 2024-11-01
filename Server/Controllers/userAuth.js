@@ -75,7 +75,6 @@ const register = async (req, res) => {
     }
 };
 
-
 // Helper function to save user to the database
 const saveUser = async (name, email, password, role, res) => {
     const insertUserQuery = "INSERT INTO userdata (username, email, password, role) VALUES (?, ?, ?, ?)";
@@ -89,11 +88,10 @@ const saveUser = async (name, email, password, role, res) => {
     res.status(201).json({
         success: true,
         message: "User registered successfully",
+        user: { name, email, role }, // Include role in response
     });
 };
 
-
-// OTP Verification Endpoint
 // OTP Verification Endpoint
 const verifyOtp = async (req, res) => {
     const { email, otp } = req.body;
@@ -132,7 +130,6 @@ const verifyOtp = async (req, res) => {
     }
 };
 
-
 // Login Endpoint
 const login = async (req, res) => {
     try {
@@ -161,7 +158,7 @@ const login = async (req, res) => {
             return res.status(200).json({
                 success: true,
                 message: "Login successful",
-                user: { name: user.username, email: user.email, role: user.role },
+                user: { name: user.username, email: user.email, role: user.role }, // Include role in response
             });
         } else {
             return res.status(401).json({ error: "Invalid credentials." });
@@ -175,6 +172,5 @@ const login = async (req, res) => {
         });
     }
 };
-
 
 module.exports = { register, verifyOtp, login };

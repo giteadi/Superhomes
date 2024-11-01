@@ -1,3 +1,4 @@
+// ProtectedRoute.js
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
@@ -13,7 +14,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
     // Redirect to tasks page if role not allowed
-    return <Navigate to="/admin/tasks" replace state={{ from: location }} />;
+    return <Navigate to="/" replace state={{ from: location }} />;
   }
 
   return <Outlet />; // Render child routes if authentication and role are valid

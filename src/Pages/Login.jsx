@@ -1,22 +1,41 @@
+// Login.js
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../Redux/AuthSlice'; 
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('User Logged In:', credentials);
-    // TODO: Add your login API logic and role checking here
-
-    const role = credentials.email.includes('admin') ? 'admin' : 'user'; // Example logic
-    role === 'admin' ? navigate('/admin') : navigate('/user');
+    try {
+      const resultAction = await dispatch(loginUser(credentials));
+      if (loginUser.fulfilled.match(resultAction)) {
+        const user = resultAction.payload.user; // Get the user object from response
+        const role = user.role; // Access the role from user object
+        console.log("User role:", role); // This should now correctly log the role
+        if (role === 'admin') {
+          navigate('/dashboard'); // Redirect admin to dashboard
+        } else {
+          navigate('/'); // Redirect regular users to their user page
+        }
+      } else {
+        toast.error(resultAction.payload.message); // Show error message
+      }
+    } catch (error) {
+      toast.error('Login failed!'); // Generic error message
+    }
   };
+  
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
